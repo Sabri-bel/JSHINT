@@ -9,8 +9,27 @@ const API_URL = "https://ci-jshint.herokuapp.com/api";
 //trigger a modal with bootstraps:
 const resultsModal = new bootstrap.Modal(document.getElementById("resultsModal"));
 
-//event listener for the button:
+//event listener for the button - get method:
 document.getElementById("status").addEventListener("click", e => getStatus(e));
+//event listener for the post method
+document.getElementById("submit").addEventListener("click", e => postForm(e));
+
+
+async function postForm(e) {
+    const form = new FormData(document.getElementById("checksform"));
+
+    //check if the code is working :
+    // for (let e of form.entries()) {
+     //   console.log(e);
+    //}
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+                    "Authorization": API_KEY,
+                 },
+        body: form,
+        })
+}
 
 //make a get request to the api and pass the fucntion displayed
 // async function await the promises going thru
@@ -35,8 +54,11 @@ async function getStatus(e) {
 }
 
 function displayStatus(data) {
+    //write the text of the modal banner:
     let heading = "API key status";
     let results = `<div>Your key is valid until</div>`;
+    
+    //add the data stored:
     results += `<div class="key-status"> ${data.expiry}</div>`;
 
     document.getElementById("resultsModalTitle").innerText = heading;
