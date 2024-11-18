@@ -14,10 +14,28 @@ document.getElementById("status").addEventListener("click", e => getStatus(e));
 //event listener for the post method
 document.getElementById("submit").addEventListener("click", e => postForm(e));
 
+function processOption(form) {
+    //submit the data in the correct format (comma separated list of option as instruction)
+    //without this part the code is creating multiple another key with the value of option
+    let optArray = [];
+
+    for (let entry of form.entries()) {
+        if (entry[0] === "options") {
+            optArray.push(entry[1]);
+        }
+    }
+    form.delete("options");
+    form.append("options", optArray.join());
+    return form
+}
+
+
 
 async function postForm(e) {
-    const form = new FormData(document.getElementById("checksform"));
-
+    const form = processOption(new FormData(document.getElementById("checksform")));
+    for (let entry of form.entries()) {
+        console.log(entry);
+    }
     //check if the code is working :
     // for (let e of form.entries()) {
      //   console.log(e);
